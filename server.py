@@ -7,24 +7,8 @@ app = FastAPI()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-prompt = """Each line is one file or folder.
-
-Rules:
-- Keep the EXACT same number of lines
-- Keep the EXACT same order
-- Do NOT reorder, remove, or add lines
-- Do NOT modify .exe file
-
-- A line with an extension (e.g. .exe, .zip, .txt) is a file
-- A line with NO extension is a folder
-
-- Only modify names according to the User Command
-- Do NOT modify anything else
-- Do NOT modify the file extension (e.g. .exe, .zip, .txt)
-
-Output ONLY the final list. No explanations.
-Instruction : """
-
+prompt = os.getenv("PROMPT")
+                  
 class Request(BaseModel):
     userInput: str
     fileList: list[str]
