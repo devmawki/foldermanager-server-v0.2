@@ -8,6 +8,8 @@ app = FastAPI()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 prompt = os.getenv("PROMPT")
+
+gptModel = os.getenv("MODEL")
                   
 class Request(BaseModel):
     userInput: str
@@ -16,7 +18,7 @@ class Request(BaseModel):
 @app.post("/chat")
 def chat(req: Request):
     response = client.responses.create(
-        model="gpt-4o-mini",
+        model=gptModel,
         input=[{"role": "user", "content": prompt + req.userInput},
                {"role": "user", "content": "\n".join(req.fileList)}]
     )
