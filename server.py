@@ -19,7 +19,7 @@ class Request(BaseModel):
 def chat(req: Request):
     response = client.responses.create(
         model=gptModel,
-        input=[{"role": "user", "content": prompt + req.userInput},
+        input=[{"role": "system", "content": prompt + req.userInput},
                {"role": "user", "content": "\n".join(req.fileList)}]
     )
 
