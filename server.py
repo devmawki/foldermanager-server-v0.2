@@ -7,19 +7,30 @@ app = FastAPI()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-prompt = os.getenv("PROMPT")
+renamePrompt = os.getenv("PROMPT_RENAME")
+movePrompt = os.getenv("PROMPT_MOVE")
 
 gptModel = os.getenv("MODEL")
-                  
+
 class Request(BaseModel):
     userInput: str
     fileList: list[str]
 
-@app.post("/chat")
-def chat(req: Request):
+@app.post("/rename")
+def rename(req: Request):
     response = client.responses.create(
         model=gptModel,
-        input=[{"role": "system", "content": prompt + req.userInput},
+        input=[{"role": "system", "content": renamePrompt + req.userInput},
+               {"role": "user", "content": "\n".join(req.fileList)}]
+    )
+
+    return {"result": response.output_text}
+
+@app.post("/move")
+def move(req: Request):
+    response = client.responses.create(
+        model=gptModel,
+        input=[{"role": "system", "content": movePrompt + req.userInput},
                {"role": "user", "content": "\n".join(req.fileList)}]
     )
 
